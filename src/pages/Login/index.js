@@ -1,53 +1,97 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, CardBody, 
-    CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+    CardGroup, Col, Container, Form, Input, InputGroup,  Row , Alert} from 'reactstrap';
 
-class Login extends Component {
+export default class Login extends Component {
+
+  constructor(props){
+    super(props);
+
+    console.log(props);
+
+    this.state = {
+      message: this.props.location.state? this.props.location.state.message: '',
+    };
+  }
+
+
+  logar = () => {
+
+    const requestInfo = {
+      method: 'POST',
+      body: JSON.stringify({email: this.email, password: this.password}),
+      headers: new Headers({
+          'Content-Type': 'application/json'
+      })
+    }
+
+    fetch('http://localhost:3333/sessions', requestInfo)
+    .then(response =>{
+      if(response.ok) {
+        return response.json()
+      }
+      throw new Error("Login inválido...");
+    })
+    .then(token => {
+      localStorage.setItem('token', token);
+      this.props.history.push('/home');
+      return;
+    })
+    .catch(e => {
+      this.setState({ message: e.message });
+    });
+    
+ 
+  }
+  
+
 
 
   render() {
     return (
       <div className="app flex-row align-items-center" style={{backgroundColor: 'black'}}>
-        <Container>
+        <Container >
           <Row className="justify-content-center">
             <Col md="8">
+              
+              
               <CardGroup>
-                <Card className="p-4">
+                
+                <Card className="p-4 loginIten">
                   <CardBody>
                     <Form>
                       <h1>Login</h1>
                       <p className="text-muted">Logue com sua conta</p>
+                      {
+                        this.state.message !== '' ? ( 
+                        <Alert color="danger" className="text-center"> { this.state.message }</Alert> ) : '' 
+                      }
                       <InputGroup className="mb-3">
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="icon-user"></i>
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input type="text" placeholder="Username" autoComplete="username" />
+                      
+                        <Input type="email" placeholder="Email" 
+                         required  onChange={ e => this.email = e.target.value } />
                       </InputGroup>
+                      
                       <InputGroup className="mb-4">
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="icon-lock"></i>
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input type="password" placeholder="Password" autoComplete="current-password" />
+                      
+                        <Input type="password" placeholder="Password" 
+                         required  onChange={ e => this.password = e.target.value } />
                       </InputGroup>
+                      
                       <Row>
-                        <Col xs="6">
-                          <Button color="primary" className="px-4">Login</Button>
-                        </Col>
-                        <Col xs="6" className="text-right">
-                          <Button color="link" className="px-0">Esqueci minha senha?</Button>
+                        <Col xs="12">
+                          <Button color="primary" block 
+                          className="px-4" onClick={this.logar}>Login</Button>
                         </Col>
                       </Row>
+
                     </Form>
                   </CardBody>
                 </Card>
 
 
-                <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
+                <Card className="loginIten text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
                   <CardBody className="text-center">
                     <div>
                       <h2>Registar-se</h2>
@@ -69,4 +113,3 @@ class Login extends Component {
   }
 }
 
-export default Login;

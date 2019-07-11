@@ -1,6 +1,9 @@
 import React from 'react';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import PrivateRoute from './auth';
+
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Registro from './pages/Registro';
@@ -15,11 +18,12 @@ const Routes = () => (
         <Switch>
             <Route exact path="/login" component={Login} />
             <Route path="/home" component={Dashboard} />
+            <Route path="/" component={Dashboard} />
             <Route path="/registre-se" component={Registro} />
-            <Route path="/professores" component={Professores}/>
-            <Route path="/orientacoes" component={Orientacoes} />
-            <Route path="/cadProfessor" component={CadProfessor}/>
-            <Route path="/cadOrientacao" component={CadOrientacao}/>
+            <PrivateRoute path="/professores" component={Professores}/>
+            <PrivateRoute path="/orientacoes" component={Orientacoes} />
+            <PrivateRoute path="/cadProfessor" component={CadProfessor}/>
+            <PrivateRoute path="/cadOrientacao" component={CadOrientacao}/>
         </Switch>
     </Router>
 );

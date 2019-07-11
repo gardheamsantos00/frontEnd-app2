@@ -11,7 +11,7 @@ class Registro extends Component {
         <Container>
           <Row className="justify-content-center">
             <Col md="9" lg="7" xl="6">
-              <Card className="mx-4">
+              <Card className="mx-4 loginIten">
                 <CardBody className="p-4">
                   <Form>
                     <h1 className="align-items-center">Registre-se !</h1>
