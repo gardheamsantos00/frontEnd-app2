@@ -17,13 +17,13 @@ const Routes = () => (
     <Router>
         <Switch>
             <Route exact path="/login" component={Login} />
-            <Route path="/home" component={Dashboard} />
-            <Route path="/" component={Dashboard} />
             <Route path="/registre-se" component={Registro} />
             <PrivateRoute path="/professores" component={Professores}/>
             <PrivateRoute path="/orientacoes" component={Orientacoes} />
             <PrivateRoute path="/cadProfessor" component={CadProfessor}/>
             <PrivateRoute path="/cadOrientacao" component={CadOrientacao}/>
+
+            <Route path="/home" component={Dashboard}/>
         </Switch>
     </Router>
 );

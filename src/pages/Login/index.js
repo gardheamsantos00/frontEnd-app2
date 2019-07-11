@@ -5,47 +5,43 @@ import { Button, Card, CardBody,
 
 export default class Login extends Component {
 
-  constructor(props){
-    super(props);
-
-    console.log(props);
-
+  constructor(props) {
+    super(props)
     this.state = {
-      message: this.props.location.state? this.props.location.state.message: '',
+        message : this.props.location.state ? this.props.location.state.message: '',
     };
-  }
+}
 
+    signIn = () => {
+      const data = { email: this.email, password: this.password };
 
-  logar = () => {
+      const requestInfo = {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: new Headers({
+              'Content-Type': 'application/json'
+          }),
+      };
 
-    const requestInfo = {
-      method: 'POST',
-      body: JSON.stringify({email: this.email, password: this.password}),
-      headers: new Headers({
-          'Content-Type': 'application/json'
+      fetch('http://127.0.0.1:3333/login', requestInfo)
+      .then(response => {
+
+          console.log(requestInfo);
+          if(response.ok) {
+              return response.json()
+          }
+          throw new Error("Login inválido...");
       })
+      .then(data => {
+          localStorage.setItem('token', data.token);
+          console.log(data);
+          this.props.history.push("/home");
+          return;
+      })
+      .catch(e => {
+          this.setState({ message: e.message });
+      }); 
     }
-
-    fetch('http://localhost:3333/sessions', requestInfo)
-    .then(response =>{
-      if(response.ok) {
-        return response.json()
-      }
-      throw new Error("Login inválido...");
-    })
-    .then(token => {
-      localStorage.setItem('token', token);
-      this.props.history.push('/home');
-      return;
-    })
-    .catch(e => {
-      this.setState({ message: e.message });
-    });
-    
- 
-  }
-  
-
 
 
   render() {
@@ -64,25 +60,28 @@ export default class Login extends Component {
                       <h1>Login</h1>
                       <p className="text-muted">Logue com sua conta</p>
                       {
-                        this.state.message !== '' ? ( 
-                        <Alert color="danger" className="text-center"> { this.state.message }</Alert> ) : '' 
+                        this.state.message !== '' ? (
+                          <Alert color="danger" className="text-center"  >
+                             {this.state.message} </Alert>) 
+                             
+                             : '' 
                       }
                       <InputGroup className="mb-3">
                       
                         <Input type="email" placeholder="Email" 
-                         required  onChange={ e => this.email = e.target.value } />
+                         required  onChange={e => this.email = e.target.value} />
                       </InputGroup>
                       
                       <InputGroup className="mb-4">
                       
                         <Input type="password" placeholder="Password" 
-                         required  onChange={ e => this.password = e.target.value } />
+                         required  onChange={e => this.password = e.target.value} />
                       </InputGroup>
                       
                       <Row>
                         <Col xs="12">
                           <Button color="primary" block 
-                          className="px-4" onClick={this.logar}>Login</Button>
+                          className="px-4" onClick={this.signIn}>Login</Button>
                         </Col>
                       </Row>
 

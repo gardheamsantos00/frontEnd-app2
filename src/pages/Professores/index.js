@@ -4,8 +4,23 @@ import NavbarCuston from '../../components/Navbar';
 import { Table, Button, Container,Row } from 'reactstrap'
 import { Link } from 'react-router-dom';
 
+import axios from 'axios';
+
 export default class Professores extends Component {
 
+    url = 'http://localhost:3333/professors';
+
+    state = {
+        professors: [],
+    }
+
+    componentDidMount(){
+        axios.get(this.url)
+            .then(res =>{
+                console.log(res);
+                this.setState({ professors: res.data });
+            })
+    }
     render() {
         return (
             <div  className="app flex-row align-items-center" >
@@ -21,7 +36,7 @@ export default class Professores extends Component {
                     <hr/>
                     <Row className="justify-content-center"> 
                        
-
+                    
                         <Table size="sm">
                                 <thead>
                                 <tr>
@@ -30,10 +45,15 @@ export default class Professores extends Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                </tr>
+                                
+                                {
+                                    this.state.professors.map(prof => 
+                                    <tr>
+                                        <th scope="row">{prof._id}</th>
+                                        <td>{prof.nome}</td>
+                                    </tr> )
+                                }
+                                
                                 
                                 </tbody>
                             </Table>

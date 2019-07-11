@@ -23,6 +23,12 @@ export default class NavbarCuston extends React.Component {
       isOpen: !this.state.isOpen
     });
   }
+
+  logout () {
+    localStorage.removeItem('token');
+  }
+
+
   render() {
     return (
       <div>
@@ -38,7 +44,7 @@ export default class NavbarCuston extends React.Component {
                 <NavLink href="/orientacoes">Orientações</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="/login">Sair</NavLink>
+                <NavLink href="/login" onClick={this.logout}>Sair</NavLink>
               </NavItem>
                 
                 

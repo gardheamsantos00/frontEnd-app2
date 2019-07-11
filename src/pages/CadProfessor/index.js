@@ -3,7 +3,24 @@ import Header from '../../components/Header';
 import NavbarCuston from '../../components/Navbar';
 import {Container, Row, Card, Col, Form,FormGroup, Label, Input, Button } from 'reactstrap';
 
+import axios from 'axios';
+
 export default class CadProfessor extends Component {
+
+    url = 'http://localhost:3333/professors';
+
+    state = {
+        professors: [],
+    }
+
+    componentDidMount(){
+        axios.post(this.url)
+            .then(res =>{
+                console.log(res);
+                this.setState({ professors: res.data });
+            })
+    }
+
 
     render() {
         return (
